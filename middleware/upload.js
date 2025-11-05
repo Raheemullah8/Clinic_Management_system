@@ -1,0 +1,15 @@
+import multer from "multer";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../utils/cloudinary";
+
+
+const storage = new CloudinaryStorage({
+    cloudinary:cloudinary,
+    params:{ 
+        folder:"HospitalManagementSystem",
+         allowed_formats: ["jpg", "png", "jpeg", "svg", "webp"],
+
+     }
+})
+const upload = multer({ storage: storage });
+export default upload;

@@ -1,24 +1,37 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import cloudinary from "./utils/cloudinary.js";
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/auth.js"
+import patientRoutes from "./routes/patient.js"
 
 dotenv.config(); // Load environment variables
 connectDB();
+
 const app = express();
 
 // ✅ Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// ✅ Trust proxy (for cookies in production)
+app.set("trust proxy", 1);
+
+// ✅ CORS setup
 app.use(
   cors({
     origin: process.env.FRONTEND_URL, // e.g. http://localhost:3000
     methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
-
+app.use("/api/v1/auth",authRoutes)
+app.use("/api/v1/patient",authRoutes)
 
 // ✅ Cloudinary Config
 cloudinary.config({
@@ -35,5 +48,5 @@ app.get("/", (req, res) => {
 // ✅ Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🔥 Server is running on port ${PORT}`);
+  console.log(`🔥 Server running on port ${PORT}`);
 });

@@ -12,11 +12,15 @@ const patientSchema = new mongoose.Schema(
       type: String,
       enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
     },
+     allergies: [{
+      type: String,
+      trim: true
+    }],
 
     emergencyContact: {
-      name: { type: String },
-      phone: { type: String },
-      relation: { type: String },
+      name: { type: String,trim: true },
+      phone: { type: String,trim: true },
+      relation: { type: String,trim: true },
     },
   },
   {

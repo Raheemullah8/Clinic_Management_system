@@ -1,3 +1,4 @@
+import Patient from "../models/Patient.js";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 import bcrypt from "bcrypt"
@@ -23,7 +24,6 @@ const register = async (req, res) => {
             position,
         } = req.body;
 
-        // ✅ 1. Basic validation
         if (!name || !email || !password || !phone || !address) {
             return res.status(400).json({
                 success: false,
@@ -31,7 +31,6 @@ const register = async (req, res) => {
             });
         }
 
-        // ✅ 2. Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({
@@ -40,10 +39,8 @@ const register = async (req, res) => {
             });
         }
 
-        // ✅ 3. Password hashing
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // ✅ 4. Create user object
         const newUser = new User({
             name,
             email,
@@ -51,9 +48,9 @@ const register = async (req, res) => {
             phone,
             address,
             dateOfBirth,
-            gender: gender || "Other", // default "Other"
+            gender: gender || "Other",
             profileImage: req.file ? req.file.path : "",
-            role: role || "patient",
+            role: role ,
             ...(role === "doctor" && {
                 specialization,
                 licenseNumber,
@@ -66,28 +63,44 @@ const register = async (req, res) => {
                 position,
             }),
         });
-
-        // ✅ 5. Save user
+ 
         const savedUser = await newUser.save();
-
-        // ✅ 6. Generate JWT token
+       
+        if (savedUser.role === "patient") {
+            try {
+                const patient = await Patient.create({
+                    userId: savedUser._id,
+                    allergies: [],
+                    emergencyContact: {
+                        name: "",
+                        phone: "",
+                        relation: "",
+                    },
+                });
+                console.log("✅ Patient created successfully:", patient._id);
+            } catch (error) {
+                console.error("❌ Patient Creation Error:", error);
+                return res.status(500).json({
+                    success: false,
+                    message: "Error creating patient",
+                    error: error.message,
+                });
+            }
+        }
+   
         const token = generateToken(savedUser._id, savedUser.role);
 
-        // ✅ 7. Set token in cookie
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            maxAge: 30 * 24 * 60 * 60 * 1000,
         });
 
-        // ✅ 8. Response
         return res.status(201).json({
             success: true,
             message: "User registered successfully",
-            user: {
-                data: savedUser
-            },
+            user: savedUser,
             token,
         });
     } catch (error) {
@@ -139,9 +152,10 @@ const login = async (req, res) => {
         })
 
     } catch (error) {
-  return res.status(500).json({ success: false, message: "Server Error" });
+        return res.status(500).json({ success: false, message: "Server Error" });
     }
 }
+
 const logout = (req, res) => {
     try {
         res.clearCookie("token", {
@@ -156,6 +170,7 @@ const logout = (req, res) => {
 
     }
 }
+
 const getUser = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
@@ -173,9 +188,10 @@ const getUser = async (req, res) => {
             }
         });
     } catch (error) {
-  return res.status(500).json({ success: false, message: "Server Error" });
+        return res.status(500).json({ success: false, message: "Server Error" });
     }
 }
+
 
 
 export { register, login, logout, getUser };

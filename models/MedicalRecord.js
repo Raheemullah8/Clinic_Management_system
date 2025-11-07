@@ -21,7 +21,9 @@ const medicalRecordSchema = new mongoose.Schema(
     diagnosis: {
       type: String,
       required: true,
+      trim: true,
     },
+    
 
     // Symptoms of the patient
     symptoms: [{ type: String }],

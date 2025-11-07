@@ -9,9 +9,11 @@ const patientSchema = new mongoose.Schema(
     },
 
     bloodGroup: {
-      type: String,
-      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
-    },
+  type: String,
+  enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+  default: null
+},
+
      allergies: [{
       type: String,
       trim: true

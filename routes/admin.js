@@ -1,31 +1,21 @@
-import express  from "express";
-
+import express from "express";
+import auth from "../middleware/auth.js";
+import requireRole from "../middleware/roleAuth.js";
+import {
+    createDoctor,
+    deleteDoctor,
+    getAllDoctor,
+    UpdateDoctor
+} from "../controllers/adminController.js";
+import upload from "../middleware/upload.js";
 
 
 const router = express.Router();
-//doctor manage
-router.post("/admin/doctors",registerDoctor)
-router.get("/admin/doctors",getDoctors)
-router.get("/admin/doctors/:id",getSingleDoctors)
-router.put("/admin/doctors/:id",updateDoctors)
-router.delete("/admin/doctors/:id",deleteDoctors)
-
-//patient manage
-router.get("/admin/patients",getpatients)
-router.get("/admin/patients/:id",getSinglePatients)
-router.put("/admin/patients/:id",updatePatients)
-
-//appointments manage
-router.get("/admin/appointments",getAppointments)
-router.put("/admin/appointments/:id",updateAppointments)
-
-// Dashboard & Reports
-router.get("/admin/dashboard",getDashboardData)
-router.get("/admin/reports",getReports)
-
-
-
-
+//doctor manage only admin
+router.post("/doctors", auth,upload.single("profileImage")  ,requireRole(["admin"]), createDoctor)
+router.get("/doctors", auth, requireRole(["admin"]), getAllDoctor)
+router.put("/doctors/:id", auth, requireRole(["admin"]), UpdateDoctor)
+router.post("/doctors/:id", auth, requireRole(["admin"]), deleteDoctor)
 
 export default router;
 

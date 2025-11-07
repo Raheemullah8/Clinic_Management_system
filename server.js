@@ -6,6 +6,8 @@ import cloudinary from "./utils/cloudinary.js";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/auth.js"
 import patientRoutes from "./routes/patient.js"
+import doctorsRoutes from "./routes/doctor.js"
+import admniRoutes from "./routes/admin.js"
 
 dotenv.config(); // Load environment variables
 connectDB();
@@ -31,7 +33,9 @@ app.use(
   })
 );
 app.use("/api/v1/auth",authRoutes)
-app.use("/api/v1/patient",authRoutes)
+app.use("/api/v1/patient",patientRoutes)
+app.use("/api/v1/doctors",doctorsRoutes)
+app.use("/api/v1/admin",admniRoutes)
 
 // ✅ Cloudinary Config
 cloudinary.config({

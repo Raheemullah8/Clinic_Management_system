@@ -26,8 +26,8 @@ const appointmentSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Scheduled", "Completed", "Cancelled", "No-Show"],
-      default: "Scheduled",
+      enum: ["scheduled", "completed", "cancelled", "no-show"], // ✅ All small letters
+      default: "scheduled", // ✅ small 's'
     },
     reason: {
       type: String,
@@ -36,26 +36,23 @@ const appointmentSchema = new mongoose.Schema(
     notes: {
       type: String,
     },
-    
     diagnosis: {
       type: String,
       trim: true,
       default: ""
     },
-
     prescription: {
       type: String,
       trim: true,
       default: ""
     },
-    
     isActive: {
       type: Boolean,
       default: true
     }
   },
   {
-    timestamps: true, // ✅ Automatically adds createdAt & updatedAt
+    timestamps: true,
   }
 );
 
@@ -63,20 +60,21 @@ appointmentSchema.index({ doctorId: 1, appointmentDate: 1, timeSlot: 1 }, { uniq
 appointmentSchema.index({ patientId: 1, appointmentDate: 1, timeSlot: 1 }, { unique: true });
 appointmentSchema.index({ appointmentDate: 1, status: 1 });
 
-appointmentSchema.virtual("patient",{
+appointmentSchema.virtual("patient", {
   ref: "Patient",
-  localField:"patientId",
-  foreignField:"_id",
+  localField: "patientId",
+  foreignField: "_id",
   justOne: true,
-})
-appointmentSchema.virtual("doctor",{
-  ref: "Doctor",
-  localField:"doctorId",
-  foreignField:"_id", 
-  justOne: true,
-})
+});
 
-appointmentSchema.set("toJSON", { virtuals: true});
+appointmentSchema.virtual("doctor", {
+  ref: "Doctor",
+  localField: "doctorId",
+  foreignField: "_id",
+  justOne: true,
+});
+
+appointmentSchema.set("toJSON", { virtuals: true });
 
 const Appointment = mongoose.model("Appointment", appointmentSchema);
 

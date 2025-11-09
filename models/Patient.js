@@ -1,33 +1,43 @@
-import mongoose from "mongoose";
+  import mongoose from "mongoose";
 
 const patientSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true, // ✅ Recommended: Ensures one Patient profile per User
+    },
 
-    bloodGroup: {
-  type: String,
-  enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
-  default: null
-},
+    bloodGroup: {
+      type: String,
+      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+      default: null
+    },
 
-     allergies: [{
-      type: String,
-      trim: true
-    }],
+    allergies: [{ // Array of Strings
+      type: String,
+      trim: true
+    }],
+    default: [], // 👈 Added default empty array
 
-    emergencyContact: {
-      name: { type: String,trim: true },
-      phone: { type: String,trim: true },
-      relation: { type: String,trim: true },
-    },
-  },
-  {
-    timestamps: true, // ✅ Automatically adds createdAt & updatedAt
-  }
+    emergencyContact: {
+      name: { 
+            type: String, 
+            trim: true,
+         
+        },
+      phone: { 
+            type: String, 
+            trim: true,
+        
+        },
+      relation: { type: String, trim: true },
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
 const Patient = mongoose.model("Patient", patientSchema);

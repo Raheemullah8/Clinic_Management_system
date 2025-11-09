@@ -138,7 +138,7 @@ const getDoctorById = async (req, res) => {
 const updateDoctorAvailability = async (req, res) => {
     try {
         const { availableSlots } = req.body;
-        const doctor = await Doctor.findOne({ userID: req.user.id })
+        const doctor = await Doctor.findOne({ userId: req.user.id })
         if (!doctor) {
             return res.status(404).json({
                 success: false,

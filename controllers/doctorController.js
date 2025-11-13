@@ -6,7 +6,7 @@ import Doctor from "../models/Doctor.js";
     const doctor = await Doctor.findOne({ userId: req.user.id })
       .populate(
         "userId", // ❗️ yahan "userID" nahi, "userId" likhna hai — schema me isi naam se defined hai
-        "name email phone address dateOfBirth gender profileImage"
+        "name email phone address dateOfBirth gender profileImage consultationFee qualifications specialization experience licenseNumber "
       );
 
     // ❌ Agar doctor record nahi mila
@@ -78,7 +78,7 @@ const updateDoctorProfile = async (req, res) => {
 // ✅ GET ALL DOCTORS (Patients & Admin ke liye)
 const getAllDoctors = async (req, res) => {
     try {
-        const doctors = await Doctor.findOne({ isAvailable: true })
+        const doctors = await Doctor.find({ isAvailable: true })
             .populate("userId", "name email phone specialization experience consultationFee qualifications profileImage")
             .sort({ "userId.specialization": 1 });
 

@@ -14,7 +14,6 @@ const createDoctor = async (req, res) => {
             address,
             dateOfBirth,
             gender,
-            profileImage,
             specialization,
             licenseNumber,
             qualifications,

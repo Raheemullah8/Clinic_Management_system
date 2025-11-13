@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import Appointment from "../models/Appointment.js";
 import Doctor from "../models/Doctor.js";
 import Patient from "../models/Patient.js";
@@ -19,7 +18,7 @@ const createAppointment = async (req, res) => {
     
 
     // ✅ Check if doctor exists and is available
-    const doctor = await Doctor.findById(doctorId).populate("userId");
+    const doctor = await Doctor.findById(doctorId).populate("userId"," name specialization");
     if (!doctor) {
       return res.status(404).json({
         success: false,

@@ -2,7 +2,7 @@ import express from "express"
 import auth from "../middleware/auth.js"
 import requireRole from "../middleware/roleAuth.js"
 
-import { getPatientProfile, updatePatientProfile } from "../controllers/patientController.js";
+import { getPatientById, getPatientProfile, getPatients, updatePatientById, updatePatientProfile } from "../controllers/patientController.js";
 
 
 
@@ -10,6 +10,10 @@ const router = express.Router();
 
 router.get("/profile",auth,requireRole(["patient"]),getPatientProfile)
 router.put("/profile",auth,requireRole(["patient"]),updatePatientProfile)
+// ✅ Admin ke liye alag routes
+router.get("/patients", auth, requireRole(["admin"]), getPatients);
+router.get("/patients:id", auth, requireRole(["admin"]), getPatientById);
+router.put("/:id", auth, requireRole(["admin"]), updatePatientById);
 
 export default router
 

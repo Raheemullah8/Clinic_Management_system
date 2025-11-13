@@ -28,7 +28,7 @@ router.put("/:id/status",auth, requireRole(["doctor"]),updateAppointmentStatus);
 
 //admin routes
 
-router.get("/", auth, requireRole(["admin"]), getAllAppointments);
+router.get("/appointments", auth, requireRole(["admin"]), getAllAppointments);
 
 
 

@@ -8,7 +8,6 @@ import {
 } from "../controllers/medicalRecordController.js";
 import auth from "../middleware/auth.js";
 import requireRole from "../middleware/roleAuth.js";
-
 const router = express.Router();
 
 // ✅ Doctor Routes

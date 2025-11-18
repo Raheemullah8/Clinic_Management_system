@@ -223,7 +223,9 @@ const updateAppointmentStatus = async (req, res) => {
         const userId = req.user.id; // Doctor's User ID from token
         
         // 1. Status Validation
-        const validStatuses = ['scheduled', 'confirmed', 'cancelled', 'completed'];
+       // appointmentController.js - updateAppointmentStatus function
+// appointmentController.js - updateAppointmentStatus function
+const validStatuses = ['scheduled', 'confirmed', 'completed', 'cancelled', 'no-show'];
         if (!status || !validStatuses.includes(status)) {
             return res.status(400).json({
                 success: false,

@@ -24,11 +24,11 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      enum: ["scheduled", "completed", "cancelled", "no-show"], // ✅ All small letters
-      default: "scheduled", // ✅ small 's'
-    },
+ status: {
+  type: String,
+  enum: ["scheduled", "confirmed", "completed", "cancelled", "no-show"], // ✅ Add "confirmed"
+  default: "scheduled",
+},
     reason: {
       type: String,
       required: true,

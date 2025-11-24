@@ -79,7 +79,7 @@ const register = async (req, res) => {
                 });
                 console.log("✅ Patient created successfully:", patient._id);
             } catch (error) {
-                console.error("❌ Patient Creation Error:", error);
+                console.error("❌ Patient Creation Errors:", error);
                 return res.status(500).json({
                     success: false,
                     message: "Error creating patient",
